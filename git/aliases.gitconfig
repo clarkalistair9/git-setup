@@ -1,0 +1,113 @@
+[include]
+	# Re-include guard is handled by the import scripts; keep this path stable.
+[core]
+	editor = code --wait
+	autocrlf = input
+	safecrlf = warn
+	quotepath = false
+[color]
+	ui = auto
+[color "status"]
+	added = green bold
+	changed = yellow bold
+	untracked = red bold
+[color "diff"]
+	meta = yellow
+	frag = magenta bold
+	old = red
+	new = green
+	commit = yellow
+[diff]
+	colorMoved = zebra
+	algorithm = histogram
+	mnemonicprefix = true
+	renames = true
+[branch]
+	autosetuprebase = always
+[fetch]
+	prune = true
+[merge]
+	ff = only
+	conflictstyle = zdiff3
+[pull]
+	rebase = true
+[rebase]
+	autosquash = true
+	autostash = true
+	updateRefs = true
+[init]
+	defaultBranch = main
+[commit]
+	gpgsign = false
+[tag]
+	gpgsign = false
+[gpg]
+	program = gpg
+[log]
+	date = relative
+[pager]
+	branch = false
+	stash = false
+[alias]
+	# Status and diffs
+	st = status -sb
+	d = diff --word-diff=color
+	dc = diff --cached --word-diff=color
+	dd = difftool -y
+	# Log views
+	l = log --oneline --decorate --graph --all
+	lg = log --graph --decorate --abbrev-commit --date=relative --format='%C(auto)%h%d %s %C(blue)%cr %C(green)<%an>'
+	lga = log --graph --decorate --all --abbrev-commit --date=relative --format='%C(auto)%h%d %s %C(blue)%cr %C(green)<%an>'
+	last = log -1 HEAD --stat
+	# Branch helpers
+	co = checkout
+	sw = switch
+	nb = checkout -b
+	bd = !git branch -D
+	br = branch -vv
+	# List all local branches with last commit time, author, and message
+	brlast = for-each-ref --sort=-committerdate --format='%(color:yellow)%(committerdate:relative)%09%(color:reset)%(color:green)%(authorname)%(color:reset)%09%(color:cyan)%(refname:short)%(color:reset)%09%(subject)' refs/heads
+	# Same as brlast but include remote branches
+	brlast-all = for-each-ref --sort=-committerdate --format='%(color:yellow)%(committerdate:relative)%09%(color:reset)%(color:green)%(authorname)%(color:reset)%09%(color:cyan)%(refname:short)%(color:reset)%09%(subject)' refs/heads refs/remotes
+	# Commit helpers
+	ca = commit --amend
+	amend = commit --amend --no-edit
+	fix = commit --fixup=HEAD~1
+	squash = commit --squash=HEAD~1
+	c = commit -v
+	cm = commit -m
+	# Add/restore
+	a = add
+	aa = add --all
+	unstage = restore --staged --
+	discard = restore --source=HEAD --staged --worktree --
+	# Rebase/cherry-pick
+	rb = rebase
+	rbi = rebase -i
+	rbc = rebase --continue
+	rba = rebase --abort
+	cpick = cherry-pick
+	# Stash
+	s = stash
+	save = stash push -u
+	apply = stash apply
+	pop = stash pop
+	wip = "!git stash push -u -m \"WIP: $(date)\""
+	unwip = "!git stash list | head -n 1 | grep -q WIP && git stash pop || echo 'No WIP stash'"
+	# Grep
+	grep = grep -nI --break --heading --line-number
+	# Cleanups
+	fixup = !git rebase -i --autosquash HEAD~10
+	prune-branches = "!git branch --merged | grep -vE '(^\\*|main|master|dev)' | xargs git branch -d"
+	# Remote and sync
+	f = fetch --all --prune --tags
+	up = "!git fetch --all --prune --tags && git rebase --rebase-merges --autostash"
+	pu = !git push -u origin HEAD
+	pt = push --tags
+	# Worktrees
+	wt = worktree
+	wt-add = worktree add
+	wt-list = worktree list
+	# Blame with nicer output
+	bl = blame -w -M -C
+	# Sh
